@@ -10,6 +10,8 @@ well look no more:
 
 ## installing
 
+- linux only because i know sysfs exists there
+
 ```
 git clone https://github.com/lun-4/pp.git
 cd pp
