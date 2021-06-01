@@ -40,4 +40,6 @@ if [ "$had_any_block_devices" = "1" ]; then
         echo "Operation confirmed, running dd."
         dd "$@"
     fi
+else
+    dd "$@"
 fi
