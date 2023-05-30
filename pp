@@ -15,8 +15,8 @@ validate_block_device() {
 check_argument() {
     argument=$1
     argument_name=$(echo "$argument" | cut -d '=' -f 1)
-    possible_disk=$(echo "$argument" | cut -d '=' -f 2)
-    possible_kernel_name=$(echo "$possible_disk" | cut -d '/' -f 3)
+    possible_disk=$(echo "$argument" | cut -d '=' -f 2 | xargs realpath)
+    possible_kernel_name=$(basename "$possible_disk")
     validate_block_device "$argument_name" "$possible_kernel_name"
 }
 
