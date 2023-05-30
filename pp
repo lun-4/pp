@@ -31,7 +31,7 @@ done
 
 if [ "$had_any_block_devices" = "1" ]; then
     echo "At least one block device was found in this invocation."
-    echo -n "\tdo you wish to continue? (say 'yes'): "
+    printf "\tdo you wish to continue? (answer 'yes' if so): "
     read -r inp
     if [ ! "$inp" = "yes" ]; then
         echo "Operation not confirmed. Aborting."
