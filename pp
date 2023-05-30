@@ -1,15 +1,26 @@
 #!/bin/sh
 
+if [ "$DEBUG" = "1" ]; then set -x; fi
+set -eu
 had_any_block_devices=0
 
 validate_block_device() {
     argument_name=$1
-    possible_kernel_name=$2
+    possible_disk=$2
+    possible_kernel_name=$3
+    set +e
     device_model=$(cat "/sys/block/$possible_kernel_name/device/model" 2>/dev/null)
     if [ $? = "0" ]; then
         had_any_block_devices=1
         echo "Argument '$argument_name' points to $possible_kernel_name: $device_model"
     fi
+
+    grep "$possible_disk" /proc/mounts | awk '
+        {
+            printf("\tArgument %s is mounted to %s (type %s)\n", $1, $2, $3);
+        }
+    '
+    set -e
 }
 
 check_argument() {
@@ -17,7 +28,7 @@ check_argument() {
     argument_name=$(echo "$argument" | cut -d '=' -f 1)
     possible_disk=$(echo "$argument" | cut -d '=' -f 2 | xargs realpath)
     possible_kernel_name=$(basename "$possible_disk")
-    validate_block_device "$argument_name" "$possible_kernel_name"
+    validate_block_device "$argument_name" "$possible_disk" "$possible_kernel_name"
 }
 
 for arg in "$@"
